@@ -1,0 +1,23 @@
+.bestsellers-rail{
+    margin-top: 50px;
+}
+.bestsellers-rail h2{
+    font-size: max(2vw,24px);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+.bestsellers-rail-list{
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scroll-snap-type: x proximity;
+}
+.bestsellers-rail-list::-webkit-scrollbar{
+    height: 6px;
+}
+.bestsellers-rail-item{
+    flex: 0 0 auto;
+    width: 260px;
+    scroll-snap-align: start;
+}

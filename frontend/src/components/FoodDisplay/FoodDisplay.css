@@ -1,14 +1,105 @@
 .food-display{
-    margin-top: 30px;
+    margin-top: 60px;
+    scroll-margin-top: 90px;
+}
+.food-display-subsection{
+    margin-bottom: 46px;
+}
+.food-display-subsection h3{
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+.food-display-rail{
+    display: flex;
+    gap: 22px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-snap-type: x proximity;
+}
+.food-display-rail-item{
+    flex: 0 0 auto;
+    width: 250px;
+    scroll-snap-align: start;
+}
+.food-display-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
 }
 .food-display h2{
     font-size: max(2vw,24px);
     font-weight: 600;
 }
+.food-display-veg-toggle{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    user-select: none;
+}
+.food-display-veg-toggle input{
+    accent-color: #1a8a4a;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
 .food-display-list{
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
     margin-top: 30px;
     gap: 30px;
-    row-gap: 50px;
+    row-gap: 46px;
+}
+.food-display-empty{
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 60px 20px;
+}
+.food-display-empty svg{
+    width: 44px;
+    height: 44px;
+    color: var(--color-text-faint);
+    margin-bottom: 16px;
+}
+.food-display-empty-title{
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 6px;
+}
+.food-display-empty-text{
+    font-size: 14px;
+}
+
+.food-item-skeleton{
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+.food-item-skeleton-img{
+    width: 100%;
+    aspect-ratio: 4 / 3;
+}
+.food-item-skeleton-line{
+    height: 14px;
+    margin: 14px 20px 0px;
+    border-radius: 4px;
+}
+.food-item-skeleton-line:last-child{
+    margin-bottom: 20px;
+}
+.shimmer{
+    background: linear-gradient(90deg, #eee 0px, #f6f6f6 40px, #eee 80px);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
 }

@@ -1,0 +1,92 @@
+.staff {
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+.staff-subtitle {
+  color: var(--color-text-muted);
+  margin-top: -14px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+.staff-form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.staff-form input {
+  flex: 1;
+  min-width: 160px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  font-size: 14px;
+  transition: border-color var(--transition);
+}
+.staff-form input:focus {
+  border-color: var(--color-primary);
+}
+.staff-form button {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 24px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color var(--transition);
+}
+.staff-form button:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+.staff-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.staff-table {
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+.staff-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+.staff-table-format {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr 1fr 0.5fr;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+}
+.staff-table-format:last-child {
+  border-bottom: none;
+}
+.staff-table-format.title {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.staff-remove {
+  font-size: 20px;
+  color: var(--color-text-faint);
+  transition: color var(--transition);
+}
+.staff-remove:hover {
+  color: var(--color-primary);
+}

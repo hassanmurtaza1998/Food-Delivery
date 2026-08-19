@@ -1,130 +1,137 @@
-# TOMATO - Food Ordering Website
+# Tomato — Food Delivery Platform
 
-This repository hosts the source code for TOMATO, a dynamic food ordering website built with the MERN Stack. It offers a user-friendly platform for seamless online food ordering.
+A full-stack food ordering platform built on the MERN stack, split into three apps: a customer-facing storefront, an admin/staff control panel, and a REST API backend. Customers browse a menu, order, pay via Stripe, and track orders by ID — with no account required to track. Staff fulfil orders; a super admin manages the menu, promotions, staff accounts, and revenue analytics.
 
-## Demo
+## Apps
 
-- User Panel: [https://food-delivery-frontend-s2l9.onrender.com/](https://food-delivery-frontend-s2l9.onrender.com/)
-- Admin Panel: [https://food-delivery-admin-wrme.onrender.com/](https://food-delivery-admin-wrme.onrender.com/)
+| App | Path | Default port | Who it's for |
+|---|---|---|---|
+| **backend** | `backend/` | `4000` | REST API, MongoDB, Stripe, email |
+| **frontend** | `frontend/` | `5173` | Customers |
+| **admin** | `admin/` | `5174` | Super admin + staff |
 
 ## Features
 
-- User Panel
-- Admin Panel
-- JWT Authentication
-- Password Hashing with Bcrypt
-- Stripe Payment Integration
-- Login/Signup
-- Logout
-- Add to Cart
-- Place Order
-- Order Management
-- Products Management
-- Filter Food Products
-- Login/Signup
-- Authenticated APIs
-- REST APIs
-- Role-Based Identification
-- Beautiful Alerts
+**Customer**
+- Browse the menu by category, with a bestsellers rail and per-category "most ordered" / "deals" sections
+- Live search, veg-only filter, discount pricing, ratings, spice level, prep time
+- Cart, promo codes, Stripe Checkout
+- Track any order by its tracking ID — no login required; a logged-in user sees their full order history automatically instead
+- Order cancellation (while still processing, with automatic refund if paid)
+- Animated UI: scroll-reveal sections, card hover effects, an animated order-status stepper
 
-## Screenshots
+**Admin panel**
+- Two roles: **Super Admin** (full access) and **Staff/Sub-admin** (orders only — can't touch the menu, promos, or revenue)
+- Menu CRUD with image upload, stock toggling, discount pricing, bestseller flag, spice level, prep time, rating
+- Order management with live status updates
+- Promo code management
+- Staff account management (create, activate/deactivate, remove)
+- Dashboard with day/week/month/year revenue charts, order stats, top-selling items
+- Full activity log (orders, menu changes, staff changes, logins) for the super admin
 
-![Hero](https://i.ibb.co/59cwY75/food-hero.png)
-- Hero Section
+**Security**
+- JWT auth (7-day expiry) with bcrypt password hashing
+- Role-based route guards on both the frontend and the API (never trust the client alone)
+- Server-side price recalculation at checkout — the client can't manipulate cart totals
+- Stripe webhook + session verification (payment status is never taken from the client)
+- Rate limiting: strict on auth endpoints, tighter still on public lookup endpoints (order tracking, promo validation) to block enumeration
+- Helmet security headers, CORS allowlist, input validation, no PII exposed on public tracking lookups
 
-![Products](https://i.ibb.co/JnNQPyQ/food-products.png)
-- Products Section
-
-![Cart](https://i.ibb.co/t2LrQ8p/food-cart.png)
-- Cart Page
-
-![Login](https://i.ibb.co/s6PgwkZ/food-login.png)
-- Login Popup
-
-## Run Locally
-
-Clone the project
-
-```bash
-    git clone https://github.com/Mshandev/Food-Delivery
-```
-Go to the project directory
-
-```bash
-    cd Food-Delivery
-```
-Install dependencies (frontend)
-
-```bash
-    cd frontend
-    npm install
-```
-Install dependencies (admin)
-
-```bash
-    cd admin
-    npm install
-```
-Install dependencies (backend)
-
-```bash
-    cd backend
-    npm install
-```
-Setup Environment Vaiables
-
-```Make .env file in "backend" folder and store environment Variables
-  JWT_SECRET=YOUR_SECRET_TEXT
-  SALT=YOUR_SALT_VALUE
-  MONGO_URL=YOUR_DATABASE_URL
-  STRIPE_SECRET_KEY=YOUR_KEY
- ```
-
-Setup the Frontend and Backend URL
-   - App.jsx in Admin folder
-      const url = YOUR_BACKEND_URL
-     
-  - StoreContext.js in Frontend folder
-      const url = YOUR_BACKEND_URL
-
-  - orderController in Backend folder
-      const frontend_url = YOUR_FRONTEND_URL 
-
-Start the Backend server
-
-```bash
-    nodemon server.js
-```
-
-Start the Frontend server
-
-```bash
-    npm start
-```
-
-Start the Backend server
-
-```bash
-    npm start
-```
 ## Tech Stack
-* [React](https://reactjs.org/)
-* [Node.js](https://nodejs.org/en)
-* [Express.js](https://expressjs.com/)
-* [Mongodb](https://www.mongodb.com/)
-* [Stripe](https://stripe.com/)
-* [JWT-Authentication](https://jwt.io/introduction)
-* [Multer](https://www.npmjs.com/package/multer)
 
-## Deployment
+- **Frontend/Admin:** React 18, Vite, React Router, Axios, Recharts (admin dashboard charts)
+- **Backend:** Node.js, Express, MongoDB + Mongoose, JWT, bcrypt, Multer, Helmet, express-rate-limit, Nodemailer, Stripe
 
-The application is deployed on Render.
+## Project Structure
 
-## Contributing
+```
+Food-Delivery/
+├── backend/     # Express API
+│   ├── config/       # env validation, constants, DB connection
+│   ├── controllers/
+│   ├── middleware/   # auth, isAdmin, isStaff, rate limiters
+│   ├── models/
+│   ├── routes/
+│   ├── services/      # email, activity logging
+│   └── scripts/       # seed:admin, seed:menu
+├── frontend/    # customer storefront
+└── admin/       # admin/staff panel
+```
 
-Contributions are always welcome!
-Just raise an issue, and we will discuss it.
+## Getting Started
 
-## Feedback
+### 1. Install dependencies
 
-If you have any feedback, please reach out to me [here](https://www.linkedin.com/in/muhammad-shan-full-stack-developer/)
+```bash
+cd backend && npm install
+cd ../frontend && npm install
+cd ../admin && npm install
+```
+
+### 2. Configure environment variables
+
+Each app has a `.env.example` — copy it to `.env` in the same folder and fill in real values.
+
+**`backend/.env`**
+
+| Variable | Required | Notes |
+|---|---|---|
+| `MONGO_URL` | yes | MongoDB connection string |
+| `JWT_SECRET` | yes | Long random string |
+| `SALT` | yes | bcrypt salt rounds (e.g. `10`) |
+| `STRIPE_SECRET_KEY` | yes | Stripe secret key |
+| `FRONTEND_URL` | yes | Used for Stripe redirect URLs |
+| `STRIPE_WEBHOOK_SECRET` | recommended | For the `/api/order/webhook` endpoint |
+| `ALLOWED_ORIGINS` | recommended | Comma-separated list of allowed CORS origins |
+| `PORT` | no | Defaults to `4000` |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` | no | Leave blank to disable outbound email (order confirmations, welcome emails) |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_NAME` | no | Only used by `npm run seed:admin` |
+
+**`admin/.env`** and **`frontend/.env`**
+
+| Variable | Notes |
+|---|---|
+| `VITE_BACKEND_URL` | The backend's URL, e.g. `http://localhost:4000` |
+
+### 3. Create your first admin account
+
+```bash
+cd backend
+# set ADMIN_EMAIL / ADMIN_PASSWORD in backend/.env first
+npm run seed:admin
+```
+
+### 4. (Optional) Seed a starter menu
+
+```bash
+npm run seed:menu   # adds 50 sample dishes across every category
+```
+
+Safe to re-run — it matches by dish name and replaces those, so it won't duplicate entries. Images are placeholders cycled from `backend/uploads/`; swap them for real photos anytime from the admin panel's List Items page.
+
+### 5. Run everything
+
+From the repo root:
+
+```bash
+./run-dev.sh
+```
+
+This starts all three apps together (backend on `:4000`, frontend on `:5173`, admin on `:5174`), installing dependencies automatically if missing. Press `Ctrl+C` to stop all three.
+
+Or run each individually:
+
+```bash
+cd backend && npm run dev     # http://localhost:4000
+cd frontend && npm run dev    # http://localhost:5173
+cd admin && npm run dev       # http://localhost:5174
+```
+
+## Managing Staff Accounts
+
+Log into the admin panel as the super admin → **Staff** → create an account with a name, email, and temporary password. That account can then log into the same admin panel and will only see **Orders** — they can update order status but can't touch the menu, promos, or revenue data.
+
+## Notes
+
+- Guest (logged-out) carts live only in browser memory and don't survive a hard page refresh — add-to-cart state persists to the server only once you're logged in.
+- True DDoS protection needs infrastructure in front of the app (a CDN/reverse proxy). The rate limiting here protects against realistic application-level abuse — brute-forcing tracking IDs or promo codes, credential stuffing — not a large-scale traffic flood.

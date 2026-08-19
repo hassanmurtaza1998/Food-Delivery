@@ -1,0 +1,96 @@
+.order-list-status-text{
+    color: var(--color-text-muted);
+    margin-top: 20px;
+}
+.order-list-empty{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    padding: 60px 0px;
+    color: var(--color-text-muted);
+}
+.order-list-empty-title{
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+.order-list{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.order-list-row{
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 1.5fr 1fr 1fr;
+    align-items: center;
+    gap: 30px;
+    font-size: 14px;
+    padding: 16px 24px;
+    color: #454545;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition);
+}
+.order-list-row:hover{
+    box-shadow: var(--shadow-md);
+}
+.order-list-row img{
+    width: 46px;
+}
+.order-list-row p b{
+    font-weight: 600;
+    color: #454545;
+}
+.order-list-tracking-id{
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--color-text-faint);
+    letter-spacing: 0.02em;
+}
+.order-list-status-pill{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.order-list-status-pill span{
+    font-size: 10px;
+}
+.status-processing span{ color: #d99a00; }
+.status-transit span{ color: #2b7fff; }
+.status-delivered span{ color: #1a8a4a; }
+.status-cancelled span{ color: var(--color-primary); }
+.order-list-row button{
+    border: none;
+    padding: 11px 0px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-primary-light);
+    cursor: pointer;
+    color: var(--color-primary-dark);
+    font-weight: 500;
+    transition: background-color var(--transition);
+}
+.order-list-row button:hover:not(:disabled){
+    background-color: #ffe1da;
+}
+.order-list-row button:disabled{
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.order-list-cancel{
+    background-color: #fff !important;
+    border: 1.5px solid var(--color-primary) !important;
+    color: var(--color-primary) !important;
+}
+@media (max-width:900px) {
+    .order-list-row{
+        grid-template-columns: 1fr 2fr 1fr;
+        row-gap: 10px;
+        font-size: 12px;
+    }
+    .order-list-row button{
+        font-size: 11px;
+    }
+}

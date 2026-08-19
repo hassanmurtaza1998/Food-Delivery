@@ -1,15 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./PlaceOrder.css";
 import { StoreContext } from "../../context/StoreContext";
-import axios from "axios";
+import api from "../../utils/api";
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom'
+
+const DELIVERY_FEE = 2;
 
 const PlaceOrder = () => {
   const navigate= useNavigate();
 
-  const { getTotalCartAmount, token, food_list, cartItems, url } =
+  const { getTotalCartAmount, getDiscountAmount, appliedPromo, token, food_list, cartItems } =
     useContext(StoreContext);
+  const [submitting, setSubmitting] = useState(false);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -22,6 +25,10 @@ const PlaceOrder = () => {
     phone: "",
   });
 
+  const subtotal = getTotalCartAmount();
+  const discount = getDiscountAmount();
+  const total = subtotal === 0 ? 0 : Math.max(subtotal - discount + DELIVERY_FEE, 0);
+
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -30,26 +37,31 @@ const PlaceOrder = () => {
 
   const placeOrder = async (event) => {
     event.preventDefault();
-    let orderItems = [];
-    food_list.map((item) => {
+    const orderItems = [];
+    food_list.forEach((item) => {
       if (cartItems[item._id] > 0) {
-        let itemInfo = item;
-        itemInfo["quantity"] = cartItems[item._id];
-        orderItems.push(itemInfo);
+        orderItems.push({ _id: item._id, name: item.name, quantity: cartItems[item._id] });
       }
     });
-    let orderData = {
+    const orderData = {
       address: data,
       items: orderItems,
-      amount: getTotalCartAmount() + 2,
+      promoCode: appliedPromo?.code,
     };
-    
-    let response= await axios.post(url+"/api/order/place",orderData,{headers:{token}});
-    if(response.data.success){
-      const {session_url}=response.data;
-      window.location.replace(session_url);
-    }else{
-      toast.error("Errors!")
+
+    setSubmitting(true);
+    try {
+      const response = await api.post("/api/order/place", orderData);
+      if (response.data.success) {
+        const {session_url}=response.data;
+        window.location.replace(session_url);
+      } else {
+        toast.error(response.data.message || "Something went wrong");
+      }
+    } catch (error) {
+      // network/5xx errors are surfaced globally by the api interceptor
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -58,10 +70,11 @@ const PlaceOrder = () => {
       toast.error("Please Login first")
       navigate("/cart")
     }
-    else if(getTotalCartAmount()===0){
+    else if(subtotal===0){
       toast.error("Please Add Items to Cart");
       navigate("/cart")
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[token])
   return (
     <form className="place-order" onSubmit={placeOrder}>
@@ -90,7 +103,7 @@ const PlaceOrder = () => {
           name="email"
           value={data.email}
           onChange={onChangeHandler}
-          type="text"
+          type="email"
           placeholder="Email Address"
         />
         <input
@@ -142,7 +155,7 @@ const PlaceOrder = () => {
           name="phone"
           value={data.phone}
           onChange={onChangeHandler}
-          type="text"
+          type="tel"
           placeholder="Phone"
         />
       </div>
@@ -152,22 +165,31 @@ const PlaceOrder = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotals</p>
-              <p>${getTotalCartAmount()}</p>
+              <p>${subtotal.toFixed(2)}</p>
             </div>
             <hr />
+            {appliedPromo && (
+              <>
+                <div className="cart-total-details">
+                  <p>Discount ({appliedPromo.code})</p>
+                  <p>-${discount.toFixed(2)}</p>
+                </div>
+                <hr />
+              </>
+            )}
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>${getTotalCartAmount() === 0 ? 0 : 2}</p>
+              <p>${subtotal === 0 ? "0.00" : DELIVERY_FEE.toFixed(2)}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>
-                ${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}
-              </b>
+              <b>${total.toFixed(2)}</b>
             </div>
           </div>
-          <button type="submit">PROCEED TO PAYMENT</button>
+          <button type="submit" disabled={submitting}>
+            {submitting ? "REDIRECTING..." : "PROCEED TO PAYMENT"}
+          </button>
         </div>
       </div>
     </form>

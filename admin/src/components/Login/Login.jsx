@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./Login.css";
-import { useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../utils/api";
 import { StoreContext } from "../../context/StoreContext";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Login = ({ url }) => {
-  const navigate=useNavigate();
-  const {admin,setAdmin,token, setToken } = useContext(StoreContext);
+const Login = () => {
+  const navigate = useNavigate();
+  const { isStaff, isSuperAdmin, token, login } = useContext(StoreContext);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -20,32 +20,38 @@ const Login = ({ url }) => {
   };
   const onLogin = async (event) => {
     event.preventDefault();
-    const response = await axios.post(url + "/api/user/login", data);
-    if (response.data.success) {
-      if (response.data.role === "admin") {
-        setToken(response.data.token);
-        setAdmin(true);
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("admin", true);
-        toast.success("Login Successfully");
-        navigate("/add")
-      }else{
-        toast.error("You are not an admin");
+    setLoading(true);
+    try {
+      const response = await api.post("/api/user/login", data);
+      if (response.data.success) {
+        if (response.data.role === "admin" || response.data.role === "subadmin") {
+          login(response.data.token, response.data.role);
+          toast.success("Login Successfully");
+          navigate(response.data.role === "admin" ? "/dashboard" : "/orders");
+        } else {
+          toast.error("You are not authorized to access the admin panel");
+        }
+      } else {
+        toast.error(response.data.message);
       }
-    } else {
-      toast.error(response.data.message);
+    } catch (error) {
+      // network/5xx errors are surfaced globally by the api interceptor
+    } finally {
+      setLoading(false);
     }
   };
-  useEffect(()=>{
-    if(admin && token){
-       navigate("/add");
+  useEffect(() => {
+    if (isStaff && token) {
+      navigate(isSuperAdmin ? "/dashboard" : "/orders");
     }
-  },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <div className="login-popup">
       <form onSubmit={onLogin} className="login-popup-container">
         <div className="login-popup-title">
-          <h2>Login</h2>
+          <h2>Admin Login</h2>
+          <p className="login-popup-subtitle">Sign in to manage your restaurant</p>
         </div>
         <div className="login-popup-inputs">
           <input
@@ -65,7 +71,7 @@ const Login = ({ url }) => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>{loading ? "Logging in..." : "Login"}</button>
       </form>
     </div>
   );

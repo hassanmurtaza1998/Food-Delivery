@@ -1,0 +1,60 @@
+.activity {
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+.activity-status-text {
+  color: var(--color-text-muted);
+  padding: 20px 0;
+}
+.activity-list {
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+.activity-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+.activity-row:last-child {
+  border-bottom: none;
+}
+.activity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+  background-color: var(--color-text-faint);
+}
+.activity-dot-order {
+  background-color: var(--color-primary);
+}
+.activity-dot-food {
+  background-color: #2b7fff;
+}
+.activity-dot-staff {
+  background-color: #8a5cf6;
+}
+.activity-dot-promo {
+  background-color: #1a8a4a;
+}
+.activity-dot-user {
+  background-color: #d99a00;
+}
+.activity-message {
+  font-weight: 500;
+  color: var(--color-text);
+}
+.activity-meta {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}

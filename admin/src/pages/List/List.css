@@ -1,17 +1,196 @@
+.list{
+    width: 100%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+.list-table{
+    background-color: var(--color-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
 .list-table-format{
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 0.5fr;
+    grid-template-columns: 0.6fr 2fr 1fr 0.8fr 1fr 0.5fr;
     align-items: center;
     gap: 10px;
-    padding: 12px 15px;
-    border: 1px solid #cacaca;
-    font-size: 13px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 14px;
+}
+.list-table-format:last-child{
+    border-bottom: none;
 }
 .list-table-format.title{
-    background-color: #f9f9f9;
+    background-color: var(--color-bg-subtle);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.04em;
 }
 .list-table-format img{
-    width: 50px;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+}
+.list-table-format .cursor{
+    cursor: pointer;
+}
+.list-remove{
+    font-size: 20px;
+    color: var(--color-text-faint);
+    transition: color var(--transition);
+}
+.list-remove:hover{
+    color: var(--color-primary);
+}
+.list-empty{
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+.list-item-name{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.veg-dot{
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.veg-dot::after{
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+.veg-dot.veg{
+    border-color: #1a8a4a;
+}
+.veg-dot.veg::after{
+    background-color: #1a8a4a;
+}
+.veg-dot.non-veg{
+    border-color: var(--color-primary-dark);
+}
+.veg-dot.non-veg::after{
+    background-color: var(--color-primary-dark);
+}
+.bestseller-tag{
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #b8860b;
+    background-color: #fff6e0;
+    padding: 3px 8px;
+    border-radius: 10px;
+}
+.list-price-strike{
+    text-decoration: line-through;
+    color: var(--color-text-faint);
+    margin-right: 4px;
+    font-size: 12px;
+}
+.list-actions{
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+.list-edit{
+    color: var(--color-text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    transition: color var(--transition);
+}
+.list-edit:hover{
+    color: var(--color-primary);
+}
+.list-modal-backdrop{
+    position: fixed;
+    inset: 0;
+    background-color: rgba(20,20,20,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+}
+.list-modal{
+    background-color: var(--color-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 28px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+.list-modal-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+.list-modal-header span{
+    font-size: 22px;
+    color: var(--color-text-faint);
+}
+.list-modal-header span:hover{
+    color: var(--color-primary);
+}
+
+.stock-badge{
+    display: inline-block;
+    width: fit-content;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    user-select: none;
+}
+.stock-badge.in-stock{
+    background-color: #e6f6ec;
+    color: #1a8a4a;
+}
+.stock-badge.out-of-stock{
+    background-color: #fdeceb;
+    color: var(--color-primary-dark);
+}
+
+.list-pagination{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.list-pagination button{
+    padding: 8px 18px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.list-pagination button:hover:not(:disabled){
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+.list-pagination button:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 @media (max-width:600px) {

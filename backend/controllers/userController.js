@@ -2,23 +2,32 @@ import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
+import { sendWelcomeEmail } from "../services/emailService.js";
+import { logActivity } from "../services/activityService.js";
 
 // login user
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
+    if (!email || !password) {
+      return res.json({ success: false, message: "Email and password are required" });
+    }
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.json({ success: false, message: "User Doesn't exist" });
+      return res.json({ success: false, message: "Invalid Credentials" });
     }
-    const isMatch =await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.json({ success: false, message: "Invalid Credentials" });
     }
-    const role=user.role;
+    if (!user.active) {
+      return res.json({ success: false, message: "This account has been deactivated" });
+    }
+    const role = user.role;
     const token = createToken(user._id);
-    res.json({ success: true, token,role });
+    logActivity("user_login", `${user.name} logged in`, { actorId: user._id.toString(), actorRole: role });
+    res.json({ success: true, token, role });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: "Error" });
@@ -28,7 +37,7 @@ const loginUser = async (req, res) => {
 // Create token
 
 const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET);
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // register user
@@ -65,9 +74,14 @@ const registerUser = async (req, res) => {
     });
 
     const user = await newUser.save();
-    const role=user.role;
+    const role = user.role;
     const token = createToken(user._id);
-    res.json({ success: true, token, role});
+    sendWelcomeEmail(user.email, user.name);
+    logActivity("user_registered", `${user.name} created an account`, {
+      actorId: user._id.toString(),
+      actorRole: role,
+    });
+    res.json({ success: true, token, role });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: "Error" });

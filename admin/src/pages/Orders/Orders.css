@@ -1,31 +1,104 @@
+.order{
+    width: 100%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+.order-empty{
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 60px 0px;
+}
 .order-item{
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;
     align-items: start;
     gap: 30px;
-    border: 1px solid tomato;
-    padding: 20px;
-    margin: 30px 0px;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 22px;
+    margin: 0 0 20px 0;
     font-size: 14px;
     color: #505050;
+    transition: box-shadow var(--transition);
+}
+.order-item:hover{
+    box-shadow: var(--shadow-md);
+}
+.order-item img{
+    width: 40px;
+    margin-top: 4px;
 }
 .order-item-food, .order-item-name{
     font-weight: 600;
+    color: var(--color-text);
 }
 .order-item-name{
-    margin-top: 30px;
+    margin-top: 20px;
     margin-bottom: 5px;
 }
 .order-item-address{
     margin-bottom: 10px;
+    color: var(--color-text-muted);
+}
+.order-item-phone{
+    color: var(--color-text-muted);
 }
 .order-item select{
-    background-color: #ffe8e4;
-    border: 1px solid tomato;
-    width: max(11vw,120px);
+    background-color: var(--color-bg-subtle);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    width: max(11vw,140px);
     padding: 10px;
     outline: none;
+    cursor: pointer;
+    transition: border-color var(--transition);
 }
+.order-item select:focus{
+    border-color: var(--color-primary);
+}
+.payment-badge{
+    display: inline-block;
+    width: fit-content;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.payment-badge.paid{
+    background-color: #e6f6ec;
+    color: #1a8a4a;
+}
+.payment-badge.unpaid{
+    background-color: #fdeceb;
+    color: var(--color-primary-dark);
+}
+
+.list-pagination{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.list-pagination button{
+    padding: 8px 18px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.list-pagination button:hover:not(:disabled){
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+.list-pagination button:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 @media (max-width:1000px) {
     .order-item{
         font-size: 12px;
@@ -37,6 +110,6 @@
         font-size: 12px;
     }
     .order-item img{
-        width: 40px;
+        width: 34px;
     }
 }

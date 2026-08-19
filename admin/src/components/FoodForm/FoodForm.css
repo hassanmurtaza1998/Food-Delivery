@@ -1,0 +1,95 @@
+.food-form {
+  gap: 20px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+.food-form p {
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+.food-form-img-upload label {
+  cursor: pointer;
+  display: inline-block;
+}
+.food-form-img-upload img,
+.food-form-img-placeholder {
+  width: 150px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1.5px dashed var(--color-border);
+  transition: border-color var(--transition);
+}
+.food-form-img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-faint);
+  background-color: var(--color-bg-subtle);
+}
+.food-form-img-upload label:hover img,
+.food-form-img-upload label:hover .food-form-img-placeholder {
+  border-color: var(--color-primary);
+}
+.food-form input,
+.food-form textarea,
+.food-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color var(--transition);
+}
+.food-form input:focus,
+.food-form textarea:focus,
+.food-form select:focus {
+  border-color: var(--color-primary);
+}
+.food-form-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.food-form-row > div {
+  flex: 1;
+  min-width: 140px;
+}
+.food-form-toggles {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.food-form-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text);
+  font-weight: 500;
+  cursor: pointer;
+}
+.food-form-toggle input {
+  width: auto;
+  accent-color: var(--color-primary);
+}
+.food-form-submit {
+  max-width: 200px;
+  border: none;
+  padding: 13px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+.food-form-submit:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+}
+.food-form-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
