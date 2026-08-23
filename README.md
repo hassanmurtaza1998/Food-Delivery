@@ -30,7 +30,7 @@ A full-stack food ordering platform built on the MERN stack, split into three ap
 - Full activity log (orders, menu changes, staff changes, logins) for the super admin
 
 **Security**
-- JWT auth (7-day expiry) with bcrypt password hashing
+- JWT auth (7-day expiry) with bcryptjs password hashing
 - Role-based route guards on both the frontend and the API (never trust the client alone)
 - Server-side price recalculation at checkout — the client can't manipulate cart totals
 - Stripe webhook + session verification (payment status is never taken from the client)
@@ -40,7 +40,7 @@ A full-stack food ordering platform built on the MERN stack, split into three ap
 ## Tech Stack
 
 - **Frontend/Admin:** React 18, Vite, React Router, Axios, Recharts (admin dashboard charts)
-- **Backend:** Node.js, Express, MongoDB + Mongoose, JWT, bcrypt, Multer, Helmet, express-rate-limit, Nodemailer, Stripe
+- **Backend:** Node.js, Express, MongoDB + Mongoose, JWT, bcryptjs, Multer, Helmet, express-rate-limit, Nodemailer, Stripe
 
 ## Project Structure
 
@@ -78,7 +78,7 @@ Each app has a `.env.example` — copy it to `.env` in the same folder and fill 
 |---|---|---|
 | `MONGO_URL` | yes | MongoDB connection string |
 | `JWT_SECRET` | yes | Long random string |
-| `SALT` | yes | bcrypt salt rounds (e.g. `10`) |
+| `SALT` | yes | bcryptjs salt rounds (e.g. `10`) |
 | `STRIPE_SECRET_KEY` | yes | Stripe secret key |
 | `FRONTEND_URL` | yes | Used for Stripe redirect URLs |
 | `STRIPE_WEBHOOK_SECRET` | recommended | For the `/api/order/webhook` endpoint |
