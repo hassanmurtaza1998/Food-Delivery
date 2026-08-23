@@ -11,22 +11,31 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      return res.json({ success: false, message: "Email and password are required" });
+      return res.json({
+        success: false,
+        message: "Email and password are required",
+      });
     }
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.json({ success: false, message: "Invalid Credentials" });
+      return res.json({ success: false, message: "Invalid Credentials." });
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.json({ success: false, message: "Invalid Credentials" });
     }
     if (!user.active) {
-      return res.json({ success: false, message: "This account has been deactivated" });
+      return res.json({
+        success: false,
+        message: "This account has been deactivated",
+      });
     }
     const role = user.role;
     const token = createToken(user._id);
-    logActivity("user_login", `${user.name} logged in`, { actorId: user._id.toString(), actorRole: role });
+    logActivity("user_login", `${user.name} logged in`, {
+      actorId: user._id.toString(),
+      actorRole: role,
+    });
     res.json({ success: true, token, role });
   } catch (error) {
     console.log(error);

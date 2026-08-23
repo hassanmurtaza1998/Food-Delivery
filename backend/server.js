@@ -13,6 +13,7 @@ import staffRouter from "./routes/staffRoute.js";
 import activityRouter from "./routes/activityRoute.js";
 import { apiLimiter } from "./middleware/rateLimiter.js";
 import { stripeWebhook } from "./controllers/orderController.js";
+import morgan from "morgan";
 
 validateEnv();
 
@@ -27,19 +28,24 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
 
 // Stripe requires the raw, unparsed body to verify webhook signatures,
 // so this route must be registered before express.json().
-app.post("/api/order/webhook", express.raw({ type: "application/json" }), stripeWebhook);
+app.post(
+  "/api/order/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhook,
+);
 
 //middlewares
 // The admin/frontend apps live on different origins (ports in dev, likely
 // subdomains in prod) and load food images directly from this API, so the
 // default same-origin Cross-Origin-Resource-Policy would silently block them.
+app.use(morgan("dev"));
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(express.json());
 app.use(
   cors({
     origin: allowedOrigins.length > 0 ? allowedOrigins : true,
     credentials: true,
-  })
+  }),
 );
 app.use(apiLimiter);
 
