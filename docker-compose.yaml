@@ -1,0 +1,49 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: node-backend-container
+    ports:
+      - 4000:4000
+    env_file:
+      - ./backend/.env
+    networks:
+      - food-delivery-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: react-frontend-container
+    ports:
+      - 5173:80
+    networks:
+      - food-delivery-network
+    depends_on:
+      - backend
+
+  admin:
+    build:
+      context: ./admin
+    container_name: react-admin-container
+    ports:
+      - 5174:80
+    networks:
+      - food-delivery-network
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongo:8
+    container_name: food-delivery-mongodb
+    ports:
+      - 27017:27107
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - food-delivery-network
+
+networks:
+  food-delivery-network:
+
+volumes:
+  mongodb-data:
