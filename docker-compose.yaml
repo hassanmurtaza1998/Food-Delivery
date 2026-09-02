@@ -33,10 +33,10 @@ services:
       - backend
 
   mongodb:
-    image: mongo:8
+    image: mongo:7
     container_name: food-delivery-mongodb
     ports:
-      - 27017:27107
+      - 27017:27017
     volumes:
       - mongodb-data:/data/db
     networks:
